@@ -8,6 +8,9 @@ local commands = {
 	["stop"] = function()
 		require("tomat.main").stop()
 	end,
+	["show"] = function()
+		require("tomat.main").show()
+	end,
 }
 
 local function tab_completion(_, _, _)

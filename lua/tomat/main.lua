@@ -3,13 +3,12 @@ local config = require("tomat.config")
 local M = {}
 
 local timer = nil
+local time_when_done = nil
 
 function M.start()
-	print(vim.inspect(config))
-
 	-- local duration_in_seconds = config.options.session_time_in_minutes * 60
-	print("config.options.session_time_in_minutes" .. config.options.session_time_in_minutes)
-	local duration_in_seconds = 5
+	-- TODO: This is only temporary to be able to try it out in resonable time
+	local duration_in_seconds = 10
 
 	M.start_task(duration_in_seconds)
 end
@@ -24,27 +23,35 @@ function M.start_task(duration_in_seconds)
 		duration_in_seconds * 1000, -- Timer wants duration in milliseconds
 		0,
 		vim.schedule_wrap(function()
-			require("notify")("Pomodoro session ended!")
-			-- print("Pomodoro session ended!")
-			-- Add any other actions you want to trigger here
+			config.instance.notify("Pomodoro session ended!", vim.log.levels.ERROR)
+			time_when_done = nil
 		end)
 	)
+
+	time_when_done = os.time() + duration_in_seconds
+	config.instance.notify("Pomodoro session started. Time when done: " .. os.date("%Y-%m-%d %H:%M:%S", time_when_done))
 end
 
 function M.stop()
 	if timer then
 		timer:stop()
-		require("notify")("Pomodoro session cancelled.")
-		-- print("Pomodoro session cancelled.")
+		config.instance.notify("Pomodoro session cancelled.", vim.log.levels.WARN)
 		timer = nil -- Clear the timer reference
+		time_when_done = nil
 	else
-		require("notify")("No active Pomodoro session to cancel.")
-		-- print("No active Pomodoro session to cancel.")
+		config.instance.notify("No active Pomodoro session to cancel.")
 	end
 end
 
 function M.show()
 	-- Add status display here
+	if timer then
+		config.instance.notify(
+			"Pomodoro session active. Time when done: " .. os.date("%Y-%m-%d %H:%M:%S", time_when_done)
+		)
+	else
+		config.instance.notify("No active Pomodoro session.", vim.log.levels.INFO)
+	end
 end
 
 return M
