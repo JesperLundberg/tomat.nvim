@@ -1,4 +1,4 @@
-M = {}
+local M = {}
 
 -- Available commands for Tomat
 local commands = {
