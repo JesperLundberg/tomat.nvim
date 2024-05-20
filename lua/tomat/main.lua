@@ -6,9 +6,7 @@ local timer = nil
 local time_when_done = nil
 
 function M.start()
-	-- local duration_in_seconds = config.options.session_time_in_minutes * 60
-	-- TODO: This is only temporary to be able to try it out in resonable time
-	local duration_in_seconds = 10
+	local duration_in_seconds = config.options.session_time_in_minutes * 60
 
 	M.start_task(duration_in_seconds)
 end

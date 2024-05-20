@@ -79,7 +79,7 @@ describe("config", function()
 
 			-- Check if the default values are not overridden
 			assert.are.same({
-				session_time_in_minutes = 30,
+				session_time_in_minutes = 25,
 				automatic = {
 					create_a_new_session = false,
 					break_time_in_minutes = 5,
