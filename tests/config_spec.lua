@@ -31,6 +31,10 @@ describe("config", function()
 					create_a_new_session = true,
 					break_time_in_minutes = 10,
 				},
+				notification = {
+					title = "Tomat",
+					timeout = 10000,
+				},
 				icon = {
 					in_progress = "",
 					done = "",
@@ -43,6 +47,10 @@ describe("config", function()
 				automatic = {
 					create_a_new_session = true,
 					break_time_in_minutes = 10,
+				},
+				notification = {
+					title = "Tomat",
+					timeout = 10000,
 				},
 				icon = {
 					in_progress = "",
@@ -59,6 +67,10 @@ describe("config", function()
 					create_a_new_session = nil,
 					break_time_in_minutes = nil,
 				},
+				notification = {
+					title = "Tomat",
+					timeout = 10000,
+				},
 				icon = {
 					in_progress = nil,
 					done = nil,
@@ -71,6 +83,11 @@ describe("config", function()
 				automatic = {
 					create_a_new_session = false,
 					break_time_in_minutes = 5,
+				},
+
+				notification = {
+					title = "Tomat",
+					timeout = 10000,
 				},
 				icon = {
 					in_progress = "",
@@ -92,11 +109,24 @@ describe("config", function()
 					create_a_new_session = false,
 					break_time_in_minutes = 5,
 				},
+				notification = {
+					title = "Tomat",
+					timeout = 10000,
+				},
 				icon = {
 					in_progress = "",
 					done = "",
 				},
 			}, sut.options)
+		end)
+
+		it("should call notify.instance", function()
+			sut.setup()
+
+			assert.stub(notifyStub).was_called_with({
+				icons = { INFO = "", WARN = "", ERROR = "" },
+				timeout = 10000,
+			}, false) -- false is if the global config for notify should be used
 		end)
 	end)
 end)

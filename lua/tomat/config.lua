@@ -14,6 +14,10 @@ local defaults = {
 		in_progress = "",
 		done = "",
 	},
+	notification = {
+		title = "Tomat",
+		timeout = 10000, -- 10 seconds
+	},
 }
 
 function M.setup(opts)
@@ -22,7 +26,7 @@ function M.setup(opts)
 
 	M.instance = notify.instance({
 		icons = { INFO = M.options.icon.in_progress, WARN = M.options.icon.done, ERROR = M.options.icon.done },
-		timeout = 20000,
+		timeout = M.options.notification.timeout,
 	}, false)
 end
 
