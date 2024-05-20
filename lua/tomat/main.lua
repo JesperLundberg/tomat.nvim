@@ -1,8 +1,14 @@
+local config = require("tomat.config")
+
 local M = {}
+
 local timer = nil
+local time_when_done = nil
 
 function M.start()
-	local duration_in_seconds = 5 -- Read this from the setup
+	-- local duration_in_seconds = config.options.session_time_in_minutes * 60
+	-- TODO: This is only temporary to be able to try it out in resonable time
+	local duration_in_seconds = 10
 
 	M.start_task(duration_in_seconds)
 end
@@ -14,22 +20,60 @@ function M.start_task(duration_in_seconds)
 
 	timer = vim.uv.new_timer()
 	timer:start(
-		duration_in_seconds * 1000,
+		duration_in_seconds * 1000, -- Timer wants duration in milliseconds
 		0,
 		vim.schedule_wrap(function()
-			print("Pomodoro session ended!")
-			-- Add any other actions you want to trigger here
+			config.instance.notify(
+				"Pomodoro session ended!",
+				vim.log.levels.ERROR,
+				{ title = config.options.notification.title }
+			)
+			time_when_done = nil
 		end)
+	)
+
+	time_when_done = os.time() + duration_in_seconds
+	config.instance.notify(
+		"Pomodoro session started. Time when done: " .. os.date("%Y-%m-%d %H:%M:%S", time_when_done),
+		vim.log.levels.INFO,
+		{ title = config.options.notification.title }
 	)
 end
 
 function M.stop()
 	if timer then
 		timer:stop()
-		print("Pomodoro session cancelled.")
+		config.instance.notify(
+			"Pomodoro session cancelled.",
+			vim.log.levels.WARN,
+
+			{ title = config.options.notification.title }
+		)
 		timer = nil -- Clear the timer reference
+		time_when_done = nil
 	else
-		print("No active Pomodoro session to cancel.")
+		config.instance.notify(
+			"No active Pomodoro session to cancel.",
+			vim.log.levels.WARN,
+			{ title = config.options.notification.title }
+		)
+	end
+end
+
+function M.show()
+	-- Add status display here
+	if timer then
+		config.instance.notify(
+			"Pomodoro session active. Time when done: " .. os.date("%Y-%m-%d %H:%M:%S", time_when_done),
+			vim.log.levels.INFO,
+			{ title = config.options.notification.title }
+		)
+	else
+		config.instance.notify(
+			"No active Pomodoro session.",
+			vim.log.levels.WARN,
+			{ title = config.options.notification.title }
+		)
 	end
 end
 

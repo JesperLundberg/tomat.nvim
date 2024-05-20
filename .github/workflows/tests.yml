@@ -32,9 +32,9 @@ jobs:
           git clone --depth 1 https://github.com/nvim-lua/plenary.nvim ~/.local/share/nvim/site/pack/vendor/start/plenary.nvim
           ln -s "$(pwd)" ~/.local/share/nvim/site/pack/vendor/start
 
-      # - name: Prepare dependency mini.pick
-      #   run: |
-      #     git clone --depth 1 https://github.com/echasnovski/mini.pick ~/.local/share/nvim/site/pack/vendor/start/mini.pick
+      - name: Prepare dependency mini.pick
+        run: |
+          git clone --depth 1 https://github.com/rcarriga/nvim-notify ~/.local/share/nvim/site/pack/vendor/start/nvim-notify
 
       - name: Setup neovim
         uses: rhysd/action-setup-vim@v1
