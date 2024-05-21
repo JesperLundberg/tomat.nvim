@@ -41,7 +41,7 @@ describe("config", function()
 				},
 				persist = {
 					enabled = false,
-					file = vim.fn.stdpath("data") .. "/tomat_session.tmt",
+					file = vim.fn.stdpath("data") .. "/tomat_session.json",
 				},
 			})
 
@@ -62,7 +62,7 @@ describe("config", function()
 				},
 				persist = {
 					enabled = false,
-					file = vim.fn.stdpath("data") .. "/tomat_session.tmt",
+					file = vim.fn.stdpath("data") .. "/tomat_session.json",
 				},
 			}, sut.options)
 		end)
@@ -103,7 +103,7 @@ describe("config", function()
 				},
 				persist = {
 					enabled = true,
-					file = vim.fn.stdpath("data") .. "/tomat_session.tmt",
+					file = vim.fn.stdpath("data") .. "/tomat_session.json",
 				},
 			}, sut.options)
 		end)
@@ -131,7 +131,7 @@ describe("config", function()
 				},
 				persist = {
 					enabled = true,
-					file = vim.fn.stdpath("data") .. "/tomat_session.tmt",
+					file = vim.fn.stdpath("data") .. "/tomat_session.json",
 				},
 			}, sut.options)
 		end)

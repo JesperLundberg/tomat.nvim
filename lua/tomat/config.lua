@@ -20,7 +20,7 @@ local defaults = {
 	},
 	persist = {
 		enabled = true,
-		file = vim.fn.stdpath("data") .. "/tomat_session.tmt",
+		file = vim.fn.stdpath("data") .. "/tomat_session.json",
 	},
 }
 
