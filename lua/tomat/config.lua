@@ -18,6 +18,10 @@ local defaults = {
 		title = "Tomat",
 		timeout = 10000, -- 10 seconds
 	},
+	persist = {
+		enabled = true,
+		file = vim.fn.stdpath("data") .. "/tomat_session.tmt",
+	},
 }
 
 function M.setup(opts)

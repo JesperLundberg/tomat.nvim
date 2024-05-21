@@ -39,6 +39,10 @@ describe("config", function()
 					in_progress = "",
 					done = "",
 				},
+				persist = {
+					enabled = false,
+					file = vim.fn.stdpath("data") .. "/tomat_session.tmt",
+				},
 			})
 
 			-- Check if the default values are overridden
@@ -55,6 +59,10 @@ describe("config", function()
 				icon = {
 					in_progress = "",
 					done = "",
+				},
+				persist = {
+					enabled = false,
+					file = vim.fn.stdpath("data") .. "/tomat_session.tmt",
 				},
 			}, sut.options)
 		end)
@@ -93,6 +101,10 @@ describe("config", function()
 					in_progress = "",
 					done = "",
 				},
+				persist = {
+					enabled = true,
+					file = vim.fn.stdpath("data") .. "/tomat_session.tmt",
+				},
 			}, sut.options)
 		end)
 
@@ -116,6 +128,10 @@ describe("config", function()
 				icon = {
 					in_progress = "",
 					done = "",
+				},
+				persist = {
+					enabled = true,
+					file = vim.fn.stdpath("data") .. "/tomat_session.tmt",
 				},
 			}, sut.options)
 		end)
