@@ -19,11 +19,10 @@ Using lazy package manager:
 "JesperLundberg/tomat.nvim",
 dependencies = {
     "rcarriga/nvim-notify",
+    "nvim-lua/plenary.nvim",
 },
 config = function()
-    require("tomat").setup({
-        session_time_in_minutes = 50,
-    })
+    require("tomat").setup({})
 end,
 ```
 
