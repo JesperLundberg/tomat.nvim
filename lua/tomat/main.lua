@@ -33,7 +33,8 @@ local function start_task(duration_in_seconds)
 	-- Set the time when the session will be done
 	time_when_done = os.time() + duration_in_seconds
 
-	-- FIXME: Write the session timestamp to the file
+	-- Write the session timestamp to the file
+	session.write_session(time_when_done)
 
 	-- Notify the user that the session has started
 	config.instance.notify(
@@ -47,6 +48,7 @@ end
 function M.start()
 	-- Get the session timestamp (if it exists)
 	local session_timestamp = session.read_session()
+
 	local duration_in_seconds
 
 	if session_timestamp then
@@ -78,7 +80,8 @@ function M.stop()
 		timer = nil
 		time_when_done = nil
 
-	-- FIXME: Write the session timestamp to the file
+		-- Clear the session timestamp in the file
+		session.write_session(0)
 	else
 		-- Notify the user that there is no active session to cancel
 		config.instance.notify(
@@ -91,6 +94,14 @@ end
 
 -- Show the current pomodoro session status
 function M.show()
+	-- Make sure that the timer has not passed
+	if timer and os.time() > time_when_done then
+		-- Stop the timer abd reset the timer and time_when_done
+		timer:stop()
+		timer = nil
+		time_when_done = nil
+	end
+
 	-- Check if there is an active session
 	if timer then
 		config.instance.notify(
