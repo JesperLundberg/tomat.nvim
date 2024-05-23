@@ -28,6 +28,7 @@ function M.setup(opts)
 	-- Directly apply user options to M.options
 	M.options = vim.tbl_deep_extend("force", {}, defaults, opts or {})
 
+	-- Create a new instance of notify with some tomat.nvim standards and set it to M.instance
 	M.instance = notify.instance({
 		icons = { INFO = M.options.icon.in_progress, WARN = M.options.icon.done, ERROR = M.options.icon.done },
 		timeout = M.options.notification.timeout,
