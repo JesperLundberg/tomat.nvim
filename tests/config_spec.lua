@@ -3,24 +3,29 @@ local assert = require("luassert")
 local stub = require("luassert.stub")
 
 -- System under test (main)
-local sut = require("lua.tomat.config")
+local sut = require("tomat.config")
 
 describe("config", function()
-	local notifyStub
+	local notify_stub
+	local read_session_stub
 
 	before_each(function()
-		notifyStub = stub(require("notify"), "instance")
+		notify_stub = stub(require("notify"), "instance")
+		read_session_stub = stub(require("tomat.session"), "read_session")
 	end)
 
 	after_each(function()
-		if notifyStub then
-			notifyStub:revert()
+		if notify_stub then
+			notify_stub:revert()
+		end
+		if read_session_stub then
+			read_session_stub:revert()
 		end
 	end)
 
 	describe("setup", function()
 		it("should override default values with supplied values", function()
-			notifyStub.returns({
+			notify_stub.returns({
 				notify = {},
 			})
 
@@ -39,6 +44,10 @@ describe("config", function()
 					in_progress = "",
 					done = "",
 				},
+				persist = {
+					enabled = false,
+					file = vim.fn.stdpath("data") .. "/tomat_session.json",
+				},
 			})
 
 			-- Check if the default values are overridden
@@ -51,10 +60,15 @@ describe("config", function()
 				notification = {
 					title = "Tomat",
 					timeout = 10000,
+					timeout_on_timer_done = 600000,
 				},
 				icon = {
 					in_progress = "",
 					done = "",
+				},
+				persist = {
+					enabled = false,
+					file = vim.fn.stdpath("data") .. "/tomat_session.json",
 				},
 			}, sut.options)
 		end)
@@ -88,10 +102,15 @@ describe("config", function()
 				notification = {
 					title = "Tomat",
 					timeout = 10000,
+					timeout_on_timer_done = 600000,
 				},
 				icon = {
 					in_progress = "",
 					done = "",
+				},
+				persist = {
+					enabled = true,
+					file = vim.fn.stdpath("data") .. "/tomat_session.json",
 				},
 			}, sut.options)
 		end)
@@ -112,10 +131,15 @@ describe("config", function()
 				notification = {
 					title = "Tomat",
 					timeout = 10000,
+					timeout_on_timer_done = 600000,
 				},
 				icon = {
 					in_progress = "",
 					done = "",
+				},
+				persist = {
+					enabled = true,
+					file = vim.fn.stdpath("data") .. "/tomat_session.json",
 				},
 			}, sut.options)
 		end)
@@ -123,7 +147,7 @@ describe("config", function()
 		it("should call notify.instance", function()
 			sut.setup()
 
-			assert.stub(notifyStub).was_called_with({
+			assert.stub(notify_stub).was_called_with({
 				icons = { INFO = "", WARN = "", ERROR = "" },
 				timeout = 10000,
 			}, false) -- false is if the global config for notify should be used
