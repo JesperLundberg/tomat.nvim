@@ -60,6 +60,7 @@ describe("config", function()
 				notification = {
 					title = "Tomat",
 					timeout = 10000,
+					timeout_on_timer_done = 600000,
 				},
 				icon = {
 					in_progress = "",
@@ -101,6 +102,7 @@ describe("config", function()
 				notification = {
 					title = "Tomat",
 					timeout = 10000,
+					timeout_on_timer_done = 600000,
 				},
 				icon = {
 					in_progress = "",
@@ -129,6 +131,7 @@ describe("config", function()
 				notification = {
 					title = "Tomat",
 					timeout = 10000,
+					timeout_on_timer_done = 600000,
 				},
 				icon = {
 					in_progress = "",

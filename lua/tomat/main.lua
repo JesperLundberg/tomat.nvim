@@ -22,14 +22,10 @@ local function start_task(duration_in_seconds, restarted_session)
 		duration_in_seconds * 1000, -- Timer wants duration in milliseconds
 		0,
 		vim.schedule_wrap(function()
-			config.instance.notify(
-				"Pomodoro session ended!",
-				vim.log.levels.ERROR,
-				{
-					title = config.options.notification.title,
-					timeout = config.options.notification.timeout_on_timer_done,
-				}
-			)
+			config.instance.notify("Pomodoro session ended!", vim.log.levels.ERROR, {
+				title = config.options.notification.title,
+				timeout = config.options.notification.timeout_on_timer_done,
+			})
 			time_when_done = nil
 		end)
 	)
