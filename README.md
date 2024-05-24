@@ -83,7 +83,7 @@ Persist handles saving a session across restarts of neovim. If persist is enable
 #### TODO
 
 - [x] Write session to file so it can be resumed if neovim is restarted
-- [ ] Automatically resume session at start up (if it exists)
+- [x] Automatically resume session at start up (if it exists)
 - [ ] Allow user to set the path for the file themselves
 - [ ] Implement the functionality for automatically starting a new pomodoro session
   - [ ] Add break time
