@@ -66,6 +66,7 @@ local defaults = {
 	notification = {
 		title = "Tomat",
 		timeout = 10000, -- 10 seconds
+		timeout_on_timer_done = 600000, -- 10 minutes
 	},
 	persist = {
 		enabled = true,
