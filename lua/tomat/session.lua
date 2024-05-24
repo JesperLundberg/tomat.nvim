@@ -7,12 +7,9 @@ local uv = vim.uv
 local M = {}
 
 local function open_file_and_write_content(path_to_session_file, content)
-	-- FIXME: Check that the folder exists and create it if it doesn't
-
 	-- Open the file
-	local fd, err_code, err_message = uv.fs_open(path_to_session_file, "w", 438) -- 438 corresponds to O_WRONLY flag
-
-	-- FIXME: use the error code (NOENT?) to create the folder
+	-- local fd, err_code, err_message = uv.fs_open(path_to_session_file, "w", 438) -- 438 corresponds to O_WRONLY flag FIXME: Use err_code to create directory if it does not exist
+	local fd = uv.fs_open(path_to_session_file, "w", 438) -- 438 corresponds to O_WRONLY flag
 
 	if not fd then
 		error("Failed to open file")

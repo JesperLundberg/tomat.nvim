@@ -6,21 +6,26 @@ local stub = require("luassert.stub")
 local sut = require("lua.tomat.config")
 
 describe("config", function()
-	local notifyStub
+	local notify_stub
+	local read_session_stub
 
 	before_each(function()
-		notifyStub = stub(require("notify"), "instance")
+		notify_stub = stub(require("notify"), "instance")
+		read_session_stub = stub(require("tomat.session"), "read_session")
 	end)
 
 	after_each(function()
-		if notifyStub then
-			notifyStub:revert()
+		if notify_stub then
+			notify_stub:revert()
+		end
+		if read_session_stub then
+			read_session_stub:revert()
 		end
 	end)
 
 	describe("setup", function()
 		it("should override default values with supplied values", function()
-			notifyStub.returns({
+			notify_stub.returns({
 				notify = {},
 			})
 
@@ -139,7 +144,7 @@ describe("config", function()
 		it("should call notify.instance", function()
 			sut.setup()
 
-			assert.stub(notifyStub).was_called_with({
+			assert.stub(notify_stub).was_called_with({
 				icons = { INFO = "", WARN = "", ERROR = "" },
 				timeout = 10000,
 			}, false) -- false is if the global config for notify should be used
