@@ -3,7 +3,7 @@ local assert = require("luassert")
 local stub = require("luassert.stub")
 
 -- System under test (main)
-local sut = require("lua.tomat.config")
+local sut = require("tomat.config")
 
 describe("config", function()
 	local notify_stub

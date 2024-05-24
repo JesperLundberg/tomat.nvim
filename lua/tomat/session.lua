@@ -1,4 +1,3 @@
--- local path = require("plenary.path")
 local config = require("tomat.config")
 local utils = require("tomat.utils")
 
@@ -36,12 +35,14 @@ local function open_file_and_read_content(path_to_session_file)
 
 	-- Get file stats to determine size
 	local stat = uv.fs_fstat(fd)
+
 	if not stat then
 		error("Failed to get file stats")
 	end
 
 	-- Read the entire file content
 	local data = uv.fs_read(fd, stat.size, 0)
+
 	if not data then
 		error("Failed to read file")
 	end

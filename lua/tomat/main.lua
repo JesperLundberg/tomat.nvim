@@ -25,7 +25,7 @@ local function start_task(duration_in_seconds, restarted_session)
 			config.instance.notify(
 				"Pomodoro session ended!",
 				vim.log.levels.ERROR,
-				{ title = config.options.notification.title }
+				{ title = config.options.notification.title, timeout = 500000 }
 			)
 			time_when_done = nil
 		end)
