@@ -33,6 +33,16 @@ function M.setup(opts)
 		icons = { INFO = M.options.icon.in_progress, WARN = M.options.icon.done, ERROR = M.options.icon.done },
 		timeout = M.options.notification.timeout,
 	}, false)
+
+	if M.options.persist.enabled then
+		-- Read the session timestamp from the file
+		local session_timestamp = require("tomat.session").read_session()
+
+		-- If there is no session timestamp or if the session has expired, do nothing
+		if session_timestamp and os.difftime(session_timestamp, os.time()) > 0 then
+			require("tomat.main").start()
+		end
+	end
 end
 
 return M

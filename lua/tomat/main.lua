@@ -8,7 +8,8 @@ local time_when_done = nil
 
 -- Start a new pomodoro session with a specific duration
 -- @param duration_in_seconds
-local function start_task(duration_in_seconds)
+-- @param restarted_session
+local function start_task(duration_in_seconds, restarted_session)
 	if timer then
 		timer:stop() -- Ensure any existing timer is stopped
 	end
@@ -36,12 +37,17 @@ local function start_task(duration_in_seconds)
 	-- Write the session timestamp to the file
 	session.write_session(time_when_done)
 
+	local start_message
+
+	-- If the session was restarted, notify the user that the session was restarted
+	if restarted_session then
+		start_message = "Pomodoro session restarted. Time when done: " .. os.date("%Y-%m-%d %H:%M:%S", time_when_done)
+	else
+		start_message = "Pomodoro session started. Time when done: " .. os.date("%Y-%m-%d %H:%M:%S", time_when_done)
+	end
+
 	-- Notify the user that the session has started
-	config.instance.notify(
-		"Pomodoro session started. Time when done: " .. os.date("%Y-%m-%d %H:%M:%S", time_when_done),
-		vim.log.levels.INFO,
-		{ title = config.options.notification.title }
-	)
+	config.instance.notify(start_message, vim.log.levels.INFO, { title = config.options.notification.title })
 end
 
 -- Start a new pomodoro session
@@ -50,16 +56,19 @@ function M.start()
 	local session_timestamp = session.read_session()
 
 	local duration_in_seconds
+	local restarted_session
 
 	if session_timestamp then
 		-- Get the number of seconds left in the session
 		duration_in_seconds = os.difftime(session_timestamp, os.time())
+		restarted_session = true
 	else
 		duration_in_seconds = config.options.session_time_in_minutes * 60
+		restarted_session = false
 	end
 
 	-- Create a new pomodoro session
-	start_task(duration_in_seconds)
+	start_task(duration_in_seconds, restarted_session)
 end
 
 -- Stop the current pomodoro session
@@ -95,7 +104,7 @@ end
 -- Show the current pomodoro session status
 function M.show()
 	-- Make sure that the timer has not passed
-	if timer and os.time() > time_when_done then
+	if timer and time_when_done and os.time() > time_when_done then
 		-- Stop the timer abd reset the timer and time_when_done
 		timer:stop()
 		timer = nil

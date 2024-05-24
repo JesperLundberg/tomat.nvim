@@ -1,5 +1,6 @@
 -- local path = require("plenary.path")
 local config = require("tomat.config")
+local utils = require("tomat.utils")
 
 local uv = vim.uv
 
@@ -9,7 +10,10 @@ local function open_file_and_write_content(path_to_session_file, content)
 	-- FIXME: Check that the folder exists and create it if it doesn't
 
 	-- Open the file
-	local fd = uv.fs_open(path_to_session_file, "w", 438) -- 438 corresponds to O_WRONLY flag
+	local fd, err_code, err_message = uv.fs_open(path_to_session_file, "w", 438) -- 438 corresponds to O_WRONLY flag
+
+	-- FIXME: use the error code (NOENT?) to create the folder
+
 	if not fd then
 		error("Failed to open file")
 	end
@@ -27,8 +31,10 @@ end
 local function open_file_and_read_content(path_to_session_file)
 	-- Open the file
 	local fd = uv.fs_open(path_to_session_file, "r", 0) -- 0 corresponds to O_RDONLY flag
+
 	if not fd then
-		error("Failed to open file")
+		-- File does not exist or can't be read
+		return nil
 	end
 
 	-- Get file stats to determine size
@@ -65,18 +71,25 @@ end
 function M.read_session()
 	-- Get the path to the session file
 	local path_to_session_file = config.options.persist.file
+
+	-- Read the content of the file
 	local file_content = open_file_and_read_content(path_to_session_file)
+
+	-- If the file does not exist, return nil
+	if not file_content or utils.trim_whitespace_and_newlines(file_content) == "{}" then
+		return nil
+	end
 
 	-- Decode the json content
 	local json = vim.fn.json_decode(file_content)
 
-	-- Return the timestamp of the session only if it has not already passed
-	if json.timestamp < os.time() then
-		return nil
+	-- Return the timestamp of the session only if it exists and has not already passed
+	if utils.has_key(json, "timestamp") and json.timestamp >= os.time() then
+		-- Return the timestamp
+		return json.timestamp
 	end
 
-	-- Return the timestamp
-	return json.timestamp
+	return nil
 end
 
 return M
